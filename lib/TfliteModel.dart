@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
+import 'package:tflite_image_classification/constant.dart';
 
 class TfliteModel extends StatefulWidget {
   const TfliteModel({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class _TfliteModelState extends State<TfliteModel> {
   bool imageSelect = false;
   @override
   void initState() {
+    pickImage();
     super.initState();
     loadModel();
   }
@@ -49,7 +51,10 @@ class _TfliteModelState extends State<TfliteModel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Image Classification"),
+        backgroundColor: Constants.primaryColor,
+        title: const Text(
+          "Deteksi Tanaman",
+        ),
       ),
       body: ListView(
         children: [
@@ -58,15 +63,7 @@ class _TfliteModelState extends State<TfliteModel> {
                   margin: const EdgeInsets.all(10),
                   child: Image.file(_image),
                 )
-              : Container(
-                  margin: const EdgeInsets.all(10),
-                  child: const Opacity(
-                    opacity: 0.8,
-                    child: Center(
-                      child: Text("No image selected"),
-                    ),
-                  ),
-                ),
+              : Container(),
           SingleChildScrollView(
             child: Column(
               children: (imageSelect)
@@ -77,7 +74,7 @@ class _TfliteModelState extends State<TfliteModel> {
                           child: Text(
                             "${result['label']} - ${(result['confidence'] * 100.0).toStringAsFixed(2)}%",
                             style: const TextStyle(
-                                color: Colors.red, fontSize: 20),
+                                color: kPrimaryColor, fontSize: 20),
                           ),
                         ),
                       );
@@ -87,17 +84,13 @@ class _TfliteModelState extends State<TfliteModel> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: pickImage,
-        child: const Icon(Icons.add_a_photo),
-      ),
     );
   }
 
   Future pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
+      source: ImageSource.camera,
     );
     File image = File(pickedFile!.path);
     imageClassification(image);

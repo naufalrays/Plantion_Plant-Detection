@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tflite_image_classification/TfliteModel.dart';
-import 'home.dart';
+import 'package:tflite_image_classification/ui/onboarding_screen.dart';
+import 'root.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Home(),
+      home: OnboardingScreen(),
     );
   }
 }

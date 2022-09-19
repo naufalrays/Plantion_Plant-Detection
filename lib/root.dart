@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tflite_image_classification/TfliteModel.dart';
-import 'package:tflite_image_classification/page/dashboard.dart';
-import 'package:tflite_image_classification/page/profile.dart';
+import 'package:tflite_image_classification/page/favorite_page.dart';
+import 'constant.dart';
+import 'package:tflite_image_classification/page/home.dart';
+import 'package:tflite_image_classification/page/detail_page.dart';
+import 'package:tflite_image_classification/page/profile_page.dart';
 import 'package:tflite_image_classification/page/setting.dart';
+
+import 'models/plants.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,11 +17,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<Plant> favorites = [];
   int currentTab = 0;
   final List<Widget> screen = [
     Dashboard(),
     TfliteModel(),
-    Profile(),
+    ProfilePage(),
     Setting()
   ];
 
@@ -31,9 +37,14 @@ class _HomeState extends State<Home> {
         bucket: bucket,
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.camera),
-        onPressed: () {},
-      ),
+          backgroundColor: Constants.primaryColor,
+          child: Icon(Icons.qr_code_scanner),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const TfliteModel()),
+            );
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
@@ -57,12 +68,16 @@ class _HomeState extends State<Home> {
                     children: [
                       Icon(
                         Icons.home,
-                        color: currentTab == 0 ? Colors.blue : Colors.grey,
+                        color: currentTab == 0
+                            ? Constants.primaryColor
+                            : Colors.grey,
                       ),
                       Text(
                         'Home',
                         style: TextStyle(
-                          color: currentTab == 0 ? Colors.blue : Colors.grey,
+                          color: currentTab == 0
+                              ? Constants.primaryColor
+                              : Colors.grey,
                         ),
                       ),
                     ],
@@ -72,7 +87,12 @@ class _HomeState extends State<Home> {
                   minWidth: 40,
                   onPressed: () {
                     setState(() {
-                      currentScreen = TfliteModel();
+                      currentScreen = FavoritePage(
+                        favoritedPlants: favorites,
+                      );
+                      final List<Plant> favoritedPlants =
+                          Plant.getFavoritedPlants();
+                      favorites = favoritedPlants;
                       currentTab = 1;
                     });
                   },
@@ -80,13 +100,17 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.dashboard,
-                        color: currentTab == 1 ? Colors.blue : Colors.grey,
+                        Icons.favorite,
+                        color: currentTab == 1
+                            ? Constants.primaryColor
+                            : Colors.grey,
                       ),
                       Text(
-                        'Setting',
+                        'Favorite',
                         style: TextStyle(
-                          color: currentTab == 1 ? Colors.blue : Colors.grey,
+                          color: currentTab == 1
+                              ? Constants.primaryColor
+                              : Colors.grey,
                         ),
                       ),
                     ],
@@ -109,12 +133,16 @@ class _HomeState extends State<Home> {
                       children: [
                         Icon(
                           Icons.settings,
-                          color: currentTab == 2 ? Colors.blue : Colors.grey,
+                          color: currentTab == 2
+                              ? Constants.primaryColor
+                              : Colors.grey,
                         ),
                         Text(
                           'Setting',
                           style: TextStyle(
-                            color: currentTab == 2 ? Colors.blue : Colors.grey,
+                            color: currentTab == 2
+                                ? Constants.primaryColor
+                                : Colors.grey,
                           ),
                         ),
                       ],
@@ -124,7 +152,7 @@ class _HomeState extends State<Home> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = Profile();
+                        currentScreen = ProfilePage();
                         currentTab = 3;
                       });
                     },
@@ -133,12 +161,16 @@ class _HomeState extends State<Home> {
                       children: [
                         Icon(
                           Icons.person,
-                          color: currentTab == 3 ? Colors.blue : Colors.grey,
+                          color: currentTab == 3
+                              ? Constants.primaryColor
+                              : Colors.grey,
                         ),
                         Text(
                           'Account',
                           style: TextStyle(
-                            color: currentTab == 3 ? Colors.blue : Colors.grey,
+                            color: currentTab == 3
+                                ? Constants.primaryColor
+                                : Colors.grey,
                           ),
                         ),
                       ],
